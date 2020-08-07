@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
+import BlogForm from './components/BlogForm'
 import blogService from './services/blogs'
 
 const App = () => {
@@ -28,10 +29,12 @@ const App = () => {
           {user.name} logged in
           <button onClick={logout}>logout</button>
         </div>
+        <BlogForm user={user} setBlogs={setBlogs}/>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}
       </div>
+      
 }
 
 export default App
