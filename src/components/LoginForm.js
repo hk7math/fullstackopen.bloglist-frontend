@@ -1,28 +1,26 @@
 import React, { useState } from 'react'
 import loginService from '../services/login'
 
-const LoginForm = ({setUser}) => {
+const LoginForm = ({ setUser, setMsg}) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleLogin = async (e) => {
     e.preventDefault()
+    setMsg([`Loading...`, `grey`])
     setUsername('')
     setPassword('')
     try {
       const user = await loginService.login({ username, password })
-      window.localStorage.setItem(
-        'loggedBlogappUser', JSON.stringify(user)
-      )
+      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       setUser(user)
+      setMsg([`Successfully logged in as ${user.name}`,`green`])
     } catch (e) {
       console.log(e)
     }
   }
 
   return (
-  <div>
-    <h2>Log in to application</h2>
     <form onSubmit={handleLogin}>
       <div>
         username
@@ -44,7 +42,6 @@ const LoginForm = ({setUser}) => {
       </div>
       <button type='submit'>login</button>
     </form>
-  </div>
 )}
 
 export default LoginForm
