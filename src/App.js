@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 
 const App = () => {
@@ -16,27 +17,30 @@ const App = () => {
     if (userJSON && !user) setUser( JSON.parse(userJSON) )
   }, [user])
 
-  useEffect(() => {
-    if (msg[0]) setTimeout(() => setMsg([]), 3000)
-  }, [msg])
+  const popMsg = (text, color, duration) => {
+    setMsg([text, color])
+    setTimeout(() => setMsg([]), duration)
+  }
 
   const logout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser('')
-    setMsg([`You have logged out`,`red`])
+    popMsg(`You have logged out`,`red`, 3000)
   }
 
   return <>
     <h2>{!user ? 'Log in to application' : 'blogs'}</h2>
     <Notification msg={msg}/>
     {! user
-    ? <LoginForm setUser={setUser} setMsg={setMsg}/>
+    ? <LoginForm setUser={setUser} popMsg={popMsg}/>
     : <div>
         <div>
           {user.name} logged in
           <button onClick={logout}>logout</button>
         </div>
-        <BlogForm user={user} setBlogs={setBlogs} setMsg={setMsg}/>
+        <Togglable buttonLabel='new blog'>
+          <BlogForm user={user} setBlogs={setBlogs} popMsg={popMsg}/>
+        </Togglable>
         {blogs.map(blog =>
           <Blog key={blog.id} blog={blog} />
         )}

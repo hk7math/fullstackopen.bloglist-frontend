@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
 
-const BlogForm = ({ user, setBlogs, setMsg }) => {
+const BlogForm = ({ user, setBlogs, popMsg }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
   const createBlog = async (e) => {
     e.preventDefault()
-    setMsg([`Loading...`, `grey`])
+    popMsg(`Loading...`, `grey`, 3000)
     const blog = { title, author, url }
     const config = { headers: { Authorization: `bearer ${user.token}`}}
     const res = await blogService.postBlog(blog, config)
@@ -16,7 +16,7 @@ const BlogForm = ({ user, setBlogs, setMsg }) => {
     setAuthor('')
     setUrl('')
     setBlogs(prev=>[...prev,res])
-    setMsg([`a new blog ${res.title} by ${res.author} added`,`green`])
+    popMsg(`a new blog ${res.title} by ${res.author} added`,`green`, 3000)
   }
 
   return (
