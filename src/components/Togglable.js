@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-const Togglable = ({ children, buttonLabel}) => {
+const Togglable = ({ children, buttonLabel }) => {
   const [isHidden, setIsHidden] = useState(true)
   const toggleHidden = () => setIsHidden(prev => !prev)
   return (
