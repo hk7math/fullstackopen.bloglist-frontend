@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import Viewable from './components/Viewable'
 import blogService from './services/blogs'
 
 const App = () => {
@@ -41,9 +41,11 @@ const App = () => {
         <Togglable buttonLabel='new blog'>
           <BlogForm user={user} setBlogs={setBlogs} popMsg={popMsg}/>
         </Togglable>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
+        {
+          blogs.map(blog =>
+            <Viewable key={blog.id} blog={blog} />
+          )
+        }
       </div>
     }
   </>
