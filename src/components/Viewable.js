@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import blogService from '../services/blogs'
 
 const Viewable = ({ blog }) => {
   const {title, url, author, user, likes} = blog
@@ -13,7 +14,7 @@ const Viewable = ({ blog }) => {
             {url} 
             <br/> 
             {`likes ${likes} `}
-            <button>like</button>
+            <button onClick={() => blogService.likeBlog(blog)}>like</button>
             <br/> 
             {user.name}
           </div> 

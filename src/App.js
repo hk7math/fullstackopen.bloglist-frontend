@@ -15,7 +15,7 @@ const App = () => {
     const userJSON = window.localStorage.getItem('loggedBlogappUser')
     if (userJSON) blogService.getAll().then( blogs => setBlogs(blogs))
     if (userJSON && !user) setUser( JSON.parse(userJSON) )
-  }, [user])
+  }, [user, blogs])
 
   const popMsg = (text, color, duration) => {
     setMsg([text, color])
