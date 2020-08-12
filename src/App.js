@@ -13,7 +13,15 @@ const App = () => {
 
   useEffect(() => {
     const userJSON = window.localStorage.getItem('loggedBlogappUser')
-    if (userJSON) blogService.getAll().then( blogs => setBlogs(blogs))
+    if (userJSON) {
+      blogService
+        .getAll()
+        .then( blogs => {
+          blogs.sort( (blog1, blog2) => blog2.likes - blog1.likes )
+          setBlogs(blogs)
+        }
+      )
+    }
     if (userJSON && !user) setUser( JSON.parse(userJSON) )
   }, [user, blogs])
 
