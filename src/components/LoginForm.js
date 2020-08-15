@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import loginService from '../services/login'
 
-const LoginForm = ({ setUser, popMsg}) => {
+const LoginForm = ({ setUser, popMsg, setToReload }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -14,9 +14,9 @@ const LoginForm = ({ setUser, popMsg}) => {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       setUser(user)
+      setToReload(true)
       popMsg(`Successfully logged in as ${user.name}`,`green`, 3000)
     } catch (e) {
-      console.log(e)
       popMsg(e.message, `red`, 3000)
     }
   }
