@@ -48,13 +48,13 @@ Viewable.propTypes = {
     title: PropTypes.string.isRequired,
     author: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
-    user: PropTypes.exact({
+    user: PropTypes.shape({
       name: PropTypes.string.isRequired,
       username: PropTypes.string.isRequired,
       id: PropTypes.string.isRequired,
     })
   }),
-  currentUser: PropTypes.exact({
+  currentUser: PropTypes.shape({
     name: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     token: PropTypes.string.isRequired,
