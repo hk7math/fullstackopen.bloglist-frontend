@@ -22,7 +22,7 @@ const Viewable = ({ blog, currentUser, setToReload, popMsg }) => {
   }
 
   return (
-    <div style={{ border: '1px solid', padding: '2px' }}>
+    <div style={{ border: '1px solid', padding: '2px' }} className='blog'>
       {`${title} ${author}`} <button onClick={toggleHidden}>{isHidden ? 'view' : 'hide'}</button>
       {
         isHidden ||
@@ -59,8 +59,8 @@ Viewable.propTypes = {
     username: PropTypes.string.isRequired,
     token: PropTypes.string.isRequired,
   }),
-  setToReload: PropTypes.func.isRequired,
-  popMsg: PropTypes.func.isRequired,
+  setToReload: PropTypes.func,
+  popMsg: PropTypes.func,
 
 }
 
