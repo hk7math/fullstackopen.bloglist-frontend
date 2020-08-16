@@ -6,10 +6,10 @@ const Togglable = ({ children, buttonLabel }) => {
   const toggleHidden = () => setIsHidden(prev => !prev)
   return (
     <div>
-      { 
-        isHidden 
-        ? <button onClick={toggleHidden}>{buttonLabel}</button>
-        : <div>
+      {
+        isHidden
+          ? <button onClick={toggleHidden}>{buttonLabel}</button>
+          : <div>
             {children}
             <button onClick={toggleHidden}>cancel</button>
           </div>
@@ -18,7 +18,7 @@ const Togglable = ({ children, buttonLabel }) => {
   )
 }
 
-Togglable.propTypes = { 
+Togglable.propTypes = {
   buttonLabel: PropTypes.string.isRequired,
 }
 

@@ -11,17 +11,17 @@ const App = () => {
   const [user, setUser] = useState(null)
   const [msg, setMsg] = useState([])
   const [toReload, setToReload] = useState(true)
-  
+
   useEffect(() => {
     if (toReload) {
       const userJSON = window.localStorage.getItem('loggedBlogappUser')
       if (userJSON) {
         blogService
-        .getAll()
-        .then( blogs => {
-          blogs.sort( (blog1, blog2) => blog2.likes - blog1.likes )
-          setBlogs(blogs)
-        })
+          .getAll()
+          .then( blogs => {
+            blogs.sort( (blog1, blog2) => blog2.likes - blog1.likes )
+            setBlogs(blogs)
+          })
       }
       if (userJSON && !user) setUser( JSON.parse(userJSON) )
       setToReload(false)
@@ -37,15 +37,15 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser('')
     setToReload(true)
-    popMsg(`You have logged out`,`red`, 3000)
+    popMsg('You have logged out','red', 3000)
   }
 
   return <>
     <h2>{!user ? 'Log in to application' : 'blogs'}</h2>
     <Notification msg={msg}/>
     {! user
-    ? <LoginForm setToReload={setToReload} setUser={setUser} popMsg={popMsg}/>
-    : <div>
+      ? <LoginForm setToReload={setToReload} setUser={setUser} popMsg={popMsg}/>
+      : <div>
         <div>
           {user.name} logged in
           <button onClick={logout}>logout</button>

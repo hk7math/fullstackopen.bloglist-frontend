@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 const Notification = ({ msg }) => {
   const [text, color] = msg
   return (
-    <div style={{color}}>
+    <div style={{ color }}>
       {text}
     </div>
   )
