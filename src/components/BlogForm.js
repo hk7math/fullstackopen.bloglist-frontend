@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import blogService from '../services/blogs'
 
 const BlogForm = ({ user, setBlogs, popMsg, setToReload }) => {
@@ -31,6 +32,17 @@ const BlogForm = ({ user, setBlogs, popMsg, setToReload }) => {
       </form>
     </div>
   )
+}
+
+BlogForm.propTypes = { 
+  user: PropTypes.exact({
+    name: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
+  }),
+  setBlogs: PropTypes.func.isRequired,
+  popMsg: PropTypes.func.isRequired,
+  setToReload: PropTypes.func.isRequired,
 }
 
 export default BlogForm

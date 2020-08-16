@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import blogService from '../services/blogs'
+import PropTypes from 'prop-types'
 
 const Viewable = ({ blog, currentUser, setToReload, popMsg }) => {
   const {title, url, author, user, likes} = blog
@@ -38,6 +39,29 @@ const Viewable = ({ blog, currentUser, setToReload, popMsg }) => {
       }
     </div>
   )
+}
+
+Viewable.propTypes = {
+  blog: PropTypes.exact({
+    id: PropTypes.string.isRequired,
+    likes: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    user: PropTypes.exact({
+      name: PropTypes.string.isRequired,
+      username: PropTypes.string.isRequired,
+      id: PropTypes.string.isRequired,
+    })
+  }),
+  currentUser: PropTypes.exact({
+    name: PropTypes.string.isRequired,
+    username: PropTypes.string.isRequired,
+    token: PropTypes.string.isRequired,
+  }),
+  setToReload: PropTypes.func.isRequired,
+  popMsg: PropTypes.func.isRequired,
+
 }
 
 export default Viewable
