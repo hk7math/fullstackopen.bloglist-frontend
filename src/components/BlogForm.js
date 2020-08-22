@@ -16,7 +16,7 @@ const BlogForm = ({ user, setBlogs, popMsg, setToReload }) => {
     setTitle('')
     setAuthor('')
     setUrl('')
-    setBlogs(prev => [...prev,res])
+    setBlogs(prev => [...prev, res])
     setToReload(true)
     popMsg(`a new blog ${res.title} by ${res.author} added`,'green', 3000)
   }
@@ -35,14 +35,14 @@ const BlogForm = ({ user, setBlogs, popMsg, setToReload }) => {
 }
 
 BlogForm.propTypes = {
-  user: PropTypes.exact({
+  user: PropTypes.shape({
     name: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     token: PropTypes.string.isRequired,
   }),
-  setBlogs: PropTypes.func.isRequired,
-  popMsg: PropTypes.func.isRequired,
-  setToReload: PropTypes.func.isRequired,
+  setBlogs: PropTypes.func,
+  popMsg: PropTypes.func,
+  setToReload: PropTypes.func,
 }
 
 export default BlogForm

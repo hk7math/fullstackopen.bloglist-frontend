@@ -66,6 +66,6 @@ describe('<Viewable />', () => {
     const like = component.getByTestId('likeButton')
     fireEvent.click(like)
     fireEvent.click(like)
-    expect(blogService.likeBlog.mock.calls.length).toBe(2)
+    expect(spy).toHaveBeenCalledTimes(2)
   })
 })
