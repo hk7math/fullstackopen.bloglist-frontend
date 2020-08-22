@@ -30,7 +30,7 @@ const Viewable = ({ blog, currentUser, setToReload, popMsg }) => {
             {url}
             <br/>
             {`likes ${likes} `}
-            <button onClick={likeBlog}>like</button>
+            <button data-testid='likeButton' onClick={likeBlog}>like</button>
             <br/>
             {user.name}
             <br/>

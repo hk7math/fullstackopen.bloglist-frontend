@@ -2,6 +2,7 @@ import React from 'react'
 import '@testing-library/jest-dom/extend-expect'
 import { render, fireEvent } from '@testing-library/react'
 import Viewable from './Viewable'
+import blogService from '../services/blogs'
 
 const currentUser ={
   username: 'PPan',
@@ -48,11 +49,23 @@ describe('<Viewable />', () => {
   test('clicking view button shows url and like', () => {
     const button = component.getByText('view')
     fireEvent.click(button)
-
+    
     expect(component.container)
-      .toHaveTextContent('http')
-
+    .toHaveTextContent('http')
+    
     expect(component.container)
-      .toHaveTextContent('like')
+    .toHaveTextContent('like')
+  })
+  
+  test('clicking like button twice', () => {
+    const spy = jest.spyOn(blogService, 'likeBlog')
+    const button = component.getByText('view')
+    fireEvent.click(button)
+    expect(component.container)
+      .toHaveTextContent('likes 7')
+    const like = component.getByTestId('likeButton')
+    fireEvent.click(like)
+    fireEvent.click(like)
+    expect(blogService.likeBlog.mock.calls.length).toBe(2)
   })
 })
