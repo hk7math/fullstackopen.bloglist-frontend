@@ -8,10 +8,10 @@ const Togglable = ({ children, buttonLabel }) => {
     <div>
       {
         isHidden
-          ? <button onClick={toggleHidden}>{buttonLabel}</button>
+          ? <button id='blog-button' onClick={toggleHidden}>{buttonLabel}</button>
           : <div>
             {children}
-            <button onClick={toggleHidden}>cancel</button>
+            <button id='blog-button' onClick={toggleHidden}>cancel</button>
           </div>
       }
     </div>
