@@ -1,7 +1,7 @@
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
-    cy.request('POST', 'http://localhost:3001/api/testing/user')
+    cy.request('POST', 'http://localhost:3001/api/testing/user/hk7math')
     cy.visit('http://localhost:3000')
   })
 
@@ -57,6 +57,22 @@ describe('Blog app', function() {
         cy.contains('view').click()
         cy.get('button').contains('like').click()
         cy.contains('likes 1')
+      })
+      
+      it('A blog can be deleted', function() {
+        cy.contains('view').click()
+        cy.get('button').contains('remove').click()
+        cy.contains('blog blog-title by blog-author is removed')
+      })
+
+      it.only('A blog cannot be deleted by others', function() {
+        cy.request('POST', 'http://localhost:3001/api/testing/user/hk8math')
+        cy.get('button').contains('logout').click()
+        cy.get('#username').type('hk8math')
+        cy.get('#password').type('12345678')
+        cy.get('#login-button').click()
+        cy.contains('view').click()
+        cy.get('html').should('not.contain', 'remove')
       })
     })
   })
