@@ -1,12 +1,7 @@
 describe('Blog app', function() {
   beforeEach(function() {
     cy.request('POST', 'http://localhost:3001/api/testing/reset')
-    const user = {
-      "username": "hk7math",
-      "name": "hk7math",
-      "password": "12345678"
-    }
-    cy.request('POST', 'http://localhost:3001/api/users/', user)
+    cy.request('POST', 'http://localhost:3001/api/testing/user')
     cy.visit('http://localhost:3000')
   })
 
@@ -37,7 +32,7 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
     beforeEach(function() {
       cy.get('#username').type('hk7math')
       cy.get('#password').type('12345678')
@@ -51,6 +46,18 @@ describe('Blog app', function() {
       cy.get('#blog-url').type('https://blog-url.com')
       cy.get('#blog-create').click()
       cy.get('.blog').contains('blog-title blog-author')
+    })
+
+    describe('When a blog exists', function() {
+      beforeEach(function() {
+        cy.request('POST', 'http://localhost:3001/api/testing/blog')
+      })
+
+      it('A blog can be liked', function() {
+        cy.contains('view').click()
+        cy.get('button').contains('like').click()
+        cy.contains('likes 1')
+      })
     })
   })
 })
