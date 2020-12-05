@@ -1,26 +1,23 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
-import { setNotification } from '../reducers/notificationReducer'
+import { likeBlog, removeBlog } from '../reducers/blogReducer'
 
-const Viewable = ({ blog, currentUser, setToReload }) => {
+const Viewable = ({ blog, currentUser }) => {
   const dispatch = useDispatch()
   const { title, url, author, user, likes } = blog
   const [isHidden, setIsHidden] = useState(true)
   const toggleHidden = () => setIsHidden(prev => !prev)
-  const likeBlog = async () => {
-    await blogService.likeBlog(blog)
-    dispatch(setNotification(`blog ${blog.title} by ${blog.author} is liked`, 'green', 3000))
-    setToReload(true)
+
+  const clickLike = () => {
+    dispatch(likeBlog(blog))
   }
-  const removeBlog = async () => {
+
+  const clickRemove = async () => {
     const res = window.confirm(`Remove blog ${blog.title} by ${blog.author}`)
     if (res) {
       const config = { headers: { Authorization: `bearer ${currentUser.token}` } }
-      await blogService.deleteBlog(blog, config)
-      dispatch(setNotification(`blog ${blog.title} by ${blog.author} is removed`, 'red', 3000))
-      setToReload(true)
+      dispatch(removeBlog(blog, config))
     }
   }
 
@@ -30,14 +27,14 @@ const Viewable = ({ blog, currentUser, setToReload }) => {
       {
         isHidden ||
           <div>
-            {url}
+            <a href={url}>{url}</a>
             <br />
             {`likes ${likes} `}
-            <button data-testid='likeButton' onClick={likeBlog}>like</button>
+            <button data-testid='likeButton' onClick={clickLike}>like</button>
             <br />
             {user.name}
             <br />
-            {currentUser.username === user.username && <button onClick={removeBlog}>remove</button>}
+            {currentUser.username === user.username && <button onClick={clickRemove}>remove</button>}
           </div>
       }
     </div>
@@ -62,7 +59,6 @@ Viewable.propTypes = {
     username: PropTypes.string.isRequired,
     token: PropTypes.string.isRequired
   }),
-  setToReload: PropTypes.func,
   popMsg: PropTypes.func
 
 }

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { setNotification } from '../reducers/notificationReducer'
 import { addBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ user, setBlogs, setToReload }) => {
+const BlogForm = ({ user }) => {
   const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
@@ -19,7 +19,6 @@ const BlogForm = ({ user, setBlogs, setToReload }) => {
     setTitle('')
     setAuthor('')
     setUrl('')
-    setToReload(true)
   }
 
   return (
@@ -41,9 +40,7 @@ BlogForm.propTypes = {
     username: PropTypes.string.isRequired,
     token: PropTypes.string.isRequired
   }),
-  setBlogs: PropTypes.func,
-  popMsg: PropTypes.func,
-  setToReload: PropTypes.func
+  popMsg: PropTypes.func
 }
 
 export default BlogForm

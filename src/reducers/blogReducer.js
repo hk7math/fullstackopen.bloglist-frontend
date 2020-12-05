@@ -23,6 +23,26 @@ export const addBlog = (blog, config) =>
     })
   }
 
+export const likeBlog = (blog) =>
+  async dispatch => {
+    await blogService.likeBlog(blog)
+    dispatch(setNotification(`blog ${blog.title} by ${blog.author} is liked`, 'green', 3000))
+    dispatch({
+      type: 'LIKE_BLOG',
+      data: blog.id
+    })
+  }
+
+export const removeBlog = (blog, config) =>
+  async dispatch => {
+    await blogService.deleteBlog(blog, config)
+    dispatch(setNotification(`blog ${blog.title} by ${blog.author} is removed`, 'red', 3000))
+    dispatch({
+      type: 'DEL_BLOG',
+      data: blog.id
+    })
+  }
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_BLOGS':
@@ -30,6 +50,18 @@ const reducer = (state = initialState, action) => {
 
     case 'ADD_BLOG':
       return [...state, action.data]
+
+    case 'LIKE_BLOG':
+      return state.map(blog =>
+        blog.id !== action.data
+          ? blog
+          : { ...blog, likes: blog.likes + 1 }
+      ).sort((blog1, blog2) => blog2.likes - blog1.likes)
+
+    case 'DEL_BLOG':
+      return state.filter(blog =>
+        blog.id !== action.data
+      )
 
     default:
       return state

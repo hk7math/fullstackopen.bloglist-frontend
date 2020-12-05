@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import loginService from '../services/login'
 import { setNotification } from '../reducers/notificationReducer'
 
-const LoginForm = ({ setUser, setToReload }) => {
+const LoginForm = ({ setUser }) => {
   const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -18,7 +18,6 @@ const LoginForm = ({ setUser, setToReload }) => {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       setUser(user)
-      setToReload(true)
       dispatch(setNotification(`Successfully logged in as ${user.name}`, 'green', 3000))
     } catch (e) {
       dispatch(setNotification(e.message, 'red', 3000))
@@ -53,8 +52,7 @@ const LoginForm = ({ setUser, setToReload }) => {
 }
 
 LoginForm.propTypes = {
-  setUser: PropTypes.func.isRequired,
-  setToReload: PropTypes.func.isRequired
+  setUser: PropTypes.func.isRequired
 }
 
 export default LoginForm

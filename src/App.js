@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { connect, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -8,27 +8,23 @@ import Viewable from './components/Viewable'
 import { setNotification } from './reducers/notificationReducer'
 import { setBlogs } from './reducers/blogReducer'
 
-const App = ({ setNotification, setBlogs }) => {
+const App = () => {
+  const dispatch = useDispatch()
   const blogs = useSelector(state => state.blogs)
   const [user, setUser] = useState(null)
-  const [toReload, setToReload] = useState(true)
 
   useEffect(() => {
-    if (toReload) {
-      const userJSON = window.localStorage.getItem('loggedBlogappUser')
-      if (userJSON) {
-        setBlogs()
-      }
-      if (userJSON && !user) setUser(JSON.parse(userJSON))
-      setToReload(false)
+    const userJSON = window.localStorage.getItem('loggedBlogappUser')
+    if (userJSON) {
+      dispatch(setBlogs())
     }
-  }, [user, toReload, setBlogs])
+    if (userJSON && !user) setUser(JSON.parse(userJSON))
+  }, [user, dispatch])
 
   const logout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     setUser('')
-    setToReload(true)
-    setNotification('You have logged out', 'red', 3000)
+    dispatch(setNotification('You have logged out', 'red', 3000))
   }
 
   return (
@@ -36,7 +32,7 @@ const App = ({ setNotification, setBlogs }) => {
       <h2>{!user ? 'Log in to application' : 'blogs'}</h2>
       <Notification />
       {!user
-        ? <LoginForm setToReload={setToReload} setUser={setUser} />
+        ? <LoginForm setUser={setUser} />
         : (
           <div>
             <div>
@@ -44,11 +40,11 @@ const App = ({ setNotification, setBlogs }) => {
               <button onClick={logout}>logout</button>
             </div>
             <Togglable buttonLabel='new blog'>
-              <BlogForm user={user} setBlogs={setBlogs} setToReload={setToReload} />
+              <BlogForm user={user} />
             </Togglable>
             {
             blogs.map(blog =>
-              <Viewable key={blog.id} blog={blog} currentUser={user} setToReload={setToReload} />
+              <Viewable key={blog.id} blog={blog} currentUser={user} />
             )
           }
           </div>
@@ -57,9 +53,4 @@ const App = ({ setNotification, setBlogs }) => {
   )
 }
 
-const mapDispatchToProps = { setNotification, setBlogs }
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(App)
+export default App

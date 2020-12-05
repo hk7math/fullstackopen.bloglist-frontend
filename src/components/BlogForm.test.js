@@ -23,10 +23,9 @@ const blog = {
 describe('<BlogForm />', () => {
   const popMsg = jest.fn()
   const setBlogs = jest.fn()
-  const setToReload = jest.fn()
   test('submit a blog', () => {
     const component = render(
-      <BlogForm user={currentUser} setBlogs={setBlogs} popMsg={popMsg} setToReload={setToReload} />
+      <BlogForm user={currentUser} setBlogs={setBlogs} popMsg={popMsg} />
     )
     const spy = jest.spyOn(blogService, 'postBlog')
     const title = component.container.querySelector('input[name="title"]')
