@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
-import { connect } from 'react-redux'
+import { connect, useSelector } from 'react-redux'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Viewable from './components/Viewable'
-import blogService from './services/blogs'
 import { setNotification } from './reducers/notificationReducer'
+import { setBlogs } from './reducers/blogReducer'
 
-const App = ({ setNotification }) => {
-  const [blogs, setBlogs] = useState([])
+const App = ({ setNotification, setBlogs }) => {
+  const blogs = useSelector(state => state.blogs)
   const [user, setUser] = useState(null)
   const [toReload, setToReload] = useState(true)
 
@@ -17,17 +17,12 @@ const App = ({ setNotification }) => {
     if (toReload) {
       const userJSON = window.localStorage.getItem('loggedBlogappUser')
       if (userJSON) {
-        blogService
-          .getAll()
-          .then(blogs => {
-            blogs.sort((blog1, blog2) => blog2.likes - blog1.likes)
-            setBlogs(blogs)
-          })
+        setBlogs()
       }
       if (userJSON && !user) setUser(JSON.parse(userJSON))
       setToReload(false)
     }
-  }, [user, toReload])
+  }, [user, toReload, setBlogs])
 
   const logout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
@@ -62,7 +57,7 @@ const App = ({ setNotification }) => {
   )
 }
 
-const mapDispatchToProps = { setNotification }
+const mapDispatchToProps = { setNotification, setBlogs }
 
 export default connect(
   null,

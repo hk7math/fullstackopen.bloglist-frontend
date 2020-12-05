@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 import { setNotification } from '../reducers/notificationReducer'
 
-const Viewable = ({ blog, currentUser, setToReload, setNotification }) => {
+const Viewable = ({ blog, currentUser, setToReload }) => {
+  const dispatch = useDispatch()
   const { title, url, author, user, likes } = blog
   const [isHidden, setIsHidden] = useState(true)
   const toggleHidden = () => setIsHidden(prev => !prev)
   const likeBlog = async () => {
     await blogService.likeBlog(blog)
-    setNotification(`blog ${blog.title} by ${blog.author} is liked`, 'green', 3000)
+    dispatch(setNotification(`blog ${blog.title} by ${blog.author} is liked`, 'green', 3000))
     setToReload(true)
   }
   const removeBlog = async () => {
@@ -18,7 +19,7 @@ const Viewable = ({ blog, currentUser, setToReload, setNotification }) => {
     if (res) {
       const config = { headers: { Authorization: `bearer ${currentUser.token}` } }
       await blogService.deleteBlog(blog, config)
-      setNotification(`blog ${blog.title} by ${blog.author} is removed`, 'red', 3000)
+      dispatch(setNotification(`blog ${blog.title} by ${blog.author} is removed`, 'red', 3000))
       setToReload(true)
     }
   }
@@ -66,9 +67,4 @@ Viewable.propTypes = {
 
 }
 
-const mapDispatchToProps = { setNotification }
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(Viewable)
+export default Viewable

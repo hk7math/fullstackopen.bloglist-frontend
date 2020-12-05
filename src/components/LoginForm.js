@@ -1,16 +1,17 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import loginService from '../services/login'
 import { setNotification } from '../reducers/notificationReducer'
 
-const LoginForm = ({ setUser, setToReload, setNotification }) => {
+const LoginForm = ({ setUser, setToReload }) => {
+  const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    setNotification('Loading...', 'grey', 3000)
+    dispatch(setNotification('Loading...', 'grey', 3000))
     setUsername('')
     setPassword('')
     try {
@@ -18,9 +19,9 @@ const LoginForm = ({ setUser, setToReload, setNotification }) => {
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       setUser(user)
       setToReload(true)
-      setNotification(`Successfully logged in as ${user.name}`, 'green', 3000)
+      dispatch(setNotification(`Successfully logged in as ${user.name}`, 'green', 3000))
     } catch (e) {
-      setNotification(e.message, 'red', 3000)
+      dispatch(setNotification(e.message, 'red', 3000))
     }
   }
 
@@ -56,9 +57,4 @@ LoginForm.propTypes = {
   setToReload: PropTypes.func.isRequired
 }
 
-const mapDispatchToProps = { setNotification }
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(LoginForm)
+export default LoginForm

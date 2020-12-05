@@ -1,26 +1,25 @@
 import React, { useState } from 'react'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
-import blogService from '../services/blogs'
 import { setNotification } from '../reducers/notificationReducer'
+import { addBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ user, setBlogs, setToReload, setNotification }) => {
+const BlogForm = ({ user, setBlogs, setToReload }) => {
+  const dispatch = useDispatch()
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
 
   const createBlog = async (e) => {
     e.preventDefault()
-    setNotification('Loading...', 'grey', 3000)
+    dispatch(setNotification('Loading...', 'grey', 3000))
     const blog = { title, author, url }
     const config = { headers: { Authorization: `bearer ${user.token}` } }
-    const res = await blogService.postBlog(blog, config)
+    dispatch(addBlog(blog, config))
     setTitle('')
     setAuthor('')
     setUrl('')
-    setBlogs(prev => [...prev, res])
     setToReload(true)
-    setNotification(`a new blog ${res.title} by ${res.author} added`, 'green', 3000)
   }
 
   return (
@@ -47,9 +46,4 @@ BlogForm.propTypes = {
   setToReload: PropTypes.func
 }
 
-const mapDispatchToProps = { setNotification }
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(BlogForm)
+export default BlogForm
