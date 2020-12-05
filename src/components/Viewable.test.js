@@ -4,17 +4,17 @@ import { render, fireEvent } from '@testing-library/react'
 import Viewable from './Viewable'
 import blogService from '../services/blogs'
 
-const currentUser ={
+const currentUser = {
   username: 'PPan',
   name: 'Peter Pan',
   id: 'idForUser',
   token: 'tokenForUser'
 }
 
-const blog = { 
-  title: 'React patterns', 
-  author: 'Michael Chan', 
-  url: 'https://reactpatterns.com/', 
+const blog = {
+  title: 'React patterns',
+  author: 'Michael Chan',
+  url: 'https://reactpatterns.com/',
   likes: 7,
   id: 'idForTest',
   user: currentUser
@@ -25,7 +25,7 @@ describe('<Viewable />', () => {
 
   beforeEach(() => {
     component = render(
-      <Viewable blog={blog} currentUser={currentUser}/>
+      <Viewable blog={blog} currentUser={currentUser} />
     )
   })
 
@@ -44,19 +44,19 @@ describe('<Viewable />', () => {
 
     expect(component.container)
       .not.toHaveTextContent('like')
-    })
-    
+  })
+
   test('clicking view button shows url and like', () => {
     const button = component.getByText('view')
     fireEvent.click(button)
-    
+
     expect(component.container)
-    .toHaveTextContent('http')
-    
+      .toHaveTextContent('http')
+
     expect(component.container)
-    .toHaveTextContent('like')
+      .toHaveTextContent('like')
   })
-  
+
   test('clicking like button twice', () => {
     const spy = jest.spyOn(blogService, 'likeBlog')
     const button = component.getByText('view')

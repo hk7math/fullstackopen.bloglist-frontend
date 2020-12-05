@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
+import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import loginService from '../services/login'
+import { setNotification } from '../reducers/notificationReducer'
 
-const LoginForm = ({ setUser, popMsg, setToReload }) => {
+const LoginForm = ({ setUser, setToReload, setNotification }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
   const handleLogin = async (e) => {
     e.preventDefault()
-    popMsg('Loading...', 'grey', 3000)
+    setNotification('Loading...', 'grey', 3000)
     setUsername('')
     setPassword('')
     try {
@@ -16,9 +18,9 @@ const LoginForm = ({ setUser, popMsg, setToReload }) => {
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       setUser(user)
       setToReload(true)
-      popMsg(`Successfully logged in as ${user.name}`,'green', 3000)
+      setNotification(`Successfully logged in as ${user.name}`, 'green', 3000)
     } catch (e) {
-      popMsg(e.message, 'red', 3000)
+      setNotification(e.message, 'red', 3000)
     }
   }
 
@@ -46,12 +48,17 @@ const LoginForm = ({ setUser, popMsg, setToReload }) => {
       </div>
       <button type='submit' id='login-button'>login</button>
     </form>
-  )}
+  )
+}
 
 LoginForm.propTypes = {
   setUser: PropTypes.func.isRequired,
-  popMsg: PropTypes.func.isRequired,
-  setToReload: PropTypes.func.isRequired,
+  setToReload: PropTypes.func.isRequired
 }
 
-export default LoginForm
+const mapDispatchToProps = { setNotification }
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(LoginForm)

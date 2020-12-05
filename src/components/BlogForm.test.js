@@ -4,17 +4,17 @@ import { render, fireEvent } from '@testing-library/react'
 import BlogForm from './BlogForm'
 import blogService from '../services/blogs'
 
-const currentUser ={
+const currentUser = {
   username: 'PPan',
   name: 'Peter Pan',
   id: 'idForUser',
   token: 'tokenForUser'
 }
 
-const blog = { 
-  title: 'React patterns', 
-  author: 'Michael Chan', 
-  url: 'https://reactpatterns.com/', 
+const blog = {
+  title: 'React patterns',
+  author: 'Michael Chan',
+  url: 'https://reactpatterns.com/',
   likes: 7,
   id: 'idForTest',
   user: currentUser
@@ -35,17 +35,16 @@ describe('<BlogForm />', () => {
     const form = component.container.querySelector('form')
 
     fireEvent.change(title, {
-      target: { value: blog.title}
+      target: { value: blog.title }
     })
     fireEvent.change(author, {
-      target: { value: blog.author}
+      target: { value: blog.author }
     })
     fireEvent.change(url, {
-      target: { value: blog.url}
+      target: { value: blog.url }
     })
     fireEvent.submit(form)
 
     expect(spy).toHaveBeenCalledTimes(1)
-
   })
 })
