@@ -1,13 +1,17 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import PropTypes from 'prop-types'
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useRouteMatch, Redirect } from 'react-router-dom'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 
-const Viewable = ({ blog, currentUser }) => {
+const Viewable = () => {
   const dispatch = useDispatch()
+  const currentUser = useSelector(state => state.user)
+  const blogs = useSelector(state => state.blogs)
+  const match = useRouteMatch('/blogs/:id')
+
+  const blog = blogs.find(blog => blog.id === match.params.id)
+  if (!blog) return <Redirect to='/' />
   const { title, url, author, user, likes } = blog
-  const [isHidden, setIsHidden] = useState(true)
-  const toggleHidden = () => setIsHidden(prev => !prev)
 
   const clickLike = () => {
     dispatch(likeBlog(blog))
@@ -22,45 +26,18 @@ const Viewable = ({ blog, currentUser }) => {
   }
 
   return (
-    <div style={{ border: '1px solid', padding: '2px' }} className='blog'>
-      {`${title} ${author}`} <button onClick={toggleHidden}>{isHidden ? 'view' : 'hide'}</button>
-      {
-        isHidden ||
-          <div>
-            <a href={url}>{url}</a>
-            <br />
-            {`likes ${likes} `}
-            <button data-testid='likeButton' onClick={clickLike}>like</button>
-            <br />
-            {user.name}
-            <br />
-            {currentUser.username === user.username && <button onClick={clickRemove}>remove</button>}
-          </div>
-      }
-    </div>
+    <>
+      <h2>{title} {author}</h2>
+      <a href={url}>{url}</a>
+      <br />
+      {`likes ${likes} `}
+      <button data-testid='likeButton' onClick={clickLike}>like</button>
+      <br />
+      added by {user.name}
+      <br />
+      {currentUser.username === user.username && <button onClick={clickRemove}>remove</button>}
+    </>
   )
-}
-
-Viewable.propTypes = {
-  blog: PropTypes.exact({
-    id: PropTypes.string.isRequired,
-    likes: PropTypes.number.isRequired,
-    title: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    user: PropTypes.shape({
-      name: PropTypes.string.isRequired,
-      username: PropTypes.string.isRequired,
-      id: PropTypes.string.isRequired
-    })
-  }),
-  currentUser: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    token: PropTypes.string.isRequired
-  }),
-  popMsg: PropTypes.func
-
 }
 
 export default Viewable

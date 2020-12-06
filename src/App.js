@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Switch, Route } from 'react-router-dom'
+import { Switch, Route, Link } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
-import Viewable from './components/Viewable'
 import UserList from './components/UserList'
 import UserView from './components/UserView'
+import Viewable from './components/Viewable'
 import { setNotification } from './reducers/notificationReducer'
 import { setBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
@@ -45,6 +45,9 @@ const App = () => {
               <button onClick={logout}>logout</button>
             </div>
             <Switch>
+              <Route path='/blogs/:id'>
+                <Viewable />
+              </Route>
               <Route path='/users/:id'>
                 <UserView />
               </Route>
@@ -56,7 +59,12 @@ const App = () => {
                   <BlogForm user={user} />
                 </Togglable>
                 {blogs.map(blog =>
-                  <Viewable key={blog.id} blog={blog} currentUser={user} />
+                  <div key={blog.id} style={{ border: '1px solid', padding: '2px' }} className='blog'>
+                    <Link to={`/blogs/${blog.id}`}>
+                      {blog.title}
+                      <br />
+                    </Link>
+                  </div>
                 )}
               </Route>
             </Switch>
