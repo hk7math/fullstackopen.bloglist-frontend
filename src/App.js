@@ -7,6 +7,7 @@ import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Viewable from './components/Viewable'
 import UserList from './components/UserList'
+import UserView from './components/UserView'
 import { setNotification } from './reducers/notificationReducer'
 import { setBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
@@ -44,6 +45,9 @@ const App = () => {
               <button onClick={logout}>logout</button>
             </div>
             <Switch>
+              <Route path='/users/:id'>
+                <UserView />
+              </Route>
               <Route path='/users'>
                 <UserList />
               </Route>
