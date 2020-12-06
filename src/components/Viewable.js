@@ -11,7 +11,7 @@ const Viewable = () => {
 
   const blog = blogs.find(blog => blog.id === match.params.id)
   if (!blog) return <Redirect to='/blogs' />
-  const { title, url, author, user, likes } = blog
+  const { title, url, author, user, likes, comments } = blog
 
   const clickLike = () => {
     dispatch(likeBlog(blog))
@@ -36,6 +36,15 @@ const Viewable = () => {
       added by {user.name}
       <br />
       {currentUser.username === user.username && <button onClick={clickRemove}>remove</button>}
+
+      {comments.length && (
+        <>
+          <h3>comments</h3>
+          <ul>
+            {comments.map(comment => <li key={comment.date}>{comment.body}</li>)}
+          </ul>
+        </>
+      )}
     </>
   )
 }
