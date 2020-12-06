@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Switch, Route, Link } from 'react-router-dom'
+import { Switch, Route, Link, Redirect } from 'react-router-dom'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
@@ -31,45 +31,52 @@ const App = () => {
     dispatch(setNotification('You have logged out', 'red', 3000))
   }
 
+  const padding = { padding: 5 }
+
   return (
     <>
-      <h2>{!user ? 'Log in to application' : 'blogs'}</h2>
-      <Notification />
-      {!user
-        ? <LoginForm />
-        : (
-          <div>
-            <div>
-              {user.name} logged in
-              <br />
+      <div>
+        <Link style={padding} to='/blogs'>blogs</Link>
+        <Link style={padding} to='/users'>users</Link>
+        {!user
+          ? <Link style={padding} to='/login'>login</Link>
+          : (
+            <>
+              {`${user.name} logged in `}
               <button onClick={logout}>logout</button>
+            </>
+            )}
+      </div>
+      <Notification />
+      <Switch>
+        <Route path='/login'>
+          {!user ? <LoginForm /> : <Redirect to='/blogs' />}
+        </Route>
+        <Route path='/users/:id'>
+          <UserView />
+        </Route>
+        <Route path='/users'>
+          <UserList />
+        </Route>
+        <Route path='/blogs/:id'>
+          <Viewable />
+        </Route>
+        <Route path='/blogs'>
+          {!user && <Redirect to='/login' />}
+          <h2>Blog app</h2>
+          <Togglable buttonLabel='new blog'>
+            <BlogForm />
+          </Togglable>
+          {blogs.map(blog =>
+            <div key={blog.id} style={{ border: '1px solid', padding: '2px' }} className='blog'>
+              <Link to={`/blogs/${blog.id}`}>
+                {blog.title}
+                <br />
+              </Link>
             </div>
-            <Switch>
-              <Route path='/blogs/:id'>
-                <Viewable />
-              </Route>
-              <Route path='/users/:id'>
-                <UserView />
-              </Route>
-              <Route path='/users'>
-                <UserList />
-              </Route>
-              <Route path='/'>
-                <Togglable buttonLabel='new blog'>
-                  <BlogForm user={user} />
-                </Togglable>
-                {blogs.map(blog =>
-                  <div key={blog.id} style={{ border: '1px solid', padding: '2px' }} className='blog'>
-                    <Link to={`/blogs/${blog.id}`}>
-                      {blog.title}
-                      <br />
-                    </Link>
-                  </div>
-                )}
-              </Route>
-            </Switch>
-          </div>
           )}
+        </Route>
+      </Switch>
     </>
   )
 }

@@ -10,7 +10,7 @@ const Viewable = () => {
   const match = useRouteMatch('/blogs/:id')
 
   const blog = blogs.find(blog => blog.id === match.params.id)
-  if (!blog) return <Redirect to='/' />
+  if (!blog) return <Redirect to='/blogs' />
   const { title, url, author, user, likes } = blog
 
   const clickLike = () => {

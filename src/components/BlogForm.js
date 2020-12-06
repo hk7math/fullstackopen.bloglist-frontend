@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
-import PropTypes from 'prop-types'
+import { useDispatch, useSelector } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { addBlog } from '../reducers/blogReducer'
 
-const BlogForm = ({ user }) => {
+const BlogForm = () => {
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -32,15 +32,6 @@ const BlogForm = ({ user }) => {
       </form>
     </div>
   )
-}
-
-BlogForm.propTypes = {
-  user: PropTypes.shape({
-    name: PropTypes.string.isRequired,
-    username: PropTypes.string.isRequired,
-    token: PropTypes.string.isRequired
-  }),
-  popMsg: PropTypes.func
 }
 
 export default BlogForm
