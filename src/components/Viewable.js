@@ -1,12 +1,13 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useRouteMatch, Redirect } from 'react-router-dom'
-import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { likeBlog, removeBlog, commentBlog } from '../reducers/blogReducer'
 
 const Viewable = () => {
   const dispatch = useDispatch()
   const currentUser = useSelector(state => state.user)
   const blogs = useSelector(state => state.blogs)
+  const [comment, setComment] = useState('')
   const match = useRouteMatch('/blogs/:id')
 
   const blog = blogs.find(blog => blog.id === match.params.id)
@@ -25,6 +26,11 @@ const Viewable = () => {
     }
   }
 
+  const clickComment = async () => {
+    dispatch(commentBlog(blog, comment))
+    setComment('')
+  }
+
   return (
     <>
       <h2>{title} {author}</h2>
@@ -37,13 +43,13 @@ const Viewable = () => {
       <br />
       {currentUser.username === user.username && <button onClick={clickRemove}>remove</button>}
 
-      {comments.length && (
-        <>
-          <h3>comments</h3>
-          <ul>
-            {comments.map(comment => <li key={comment.date}>{comment.body}</li>)}
-          </ul>
-        </>
+      <h3>comments</h3>
+      <input name='comment' value={comment} onChange={({ target }) => setComment(target.value)} />
+      <button onClick={clickComment}>add comment</button>
+      {!!comments.length && (
+        <ul>
+          {comments.map(comment => <li key={comment.date}>{comment.body}</li>)}
+        </ul>
       )}
     </>
   )

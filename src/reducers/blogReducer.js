@@ -43,6 +43,16 @@ export const removeBlog = (blog, config) =>
     })
   }
 
+export const commentBlog = (blog, comment) =>
+  async dispatch => {
+    const res = await blogService.commentBlog(blog, comment)
+    dispatch(setNotification(`blog ${blog.title} has a new comment`, 'green', 3000))
+    dispatch({
+      type: 'COMMENT_BLOG',
+      data: res
+    })
+  }
+
 const reducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_BLOGS':
@@ -61,6 +71,13 @@ const reducer = (state = initialState, action) => {
     case 'DEL_BLOG':
       return state.filter(blog =>
         blog.id !== action.data
+      )
+
+    case 'COMMENT_BLOG':
+      return state.map(blog =>
+        blog.id !== action.data.id
+          ? blog
+          : action.data
       )
 
     default:
