@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import { Button } from '@material-ui/core'
 
 const Togglable = ({ children, buttonLabel }) => {
   const [isHidden, setIsHidden] = useState(true)
@@ -8,11 +9,13 @@ const Togglable = ({ children, buttonLabel }) => {
     <div>
       {
         isHidden
-          ? <button id='blog-button' onClick={toggleHidden}>{buttonLabel}</button>
-          : <div>
-            {children}
-            <button id='blog-button' onClick={toggleHidden}>cancel</button>
-          </div>
+          ? <Button variant='contained' id='blog-button' onClick={toggleHidden}>{buttonLabel}</Button>
+          : (
+            <div>
+              <Button color='secondary' id='blog-button' onClick={toggleHidden}>Cancel</Button>
+              {children}
+            </div>
+            )
       }
     </div>
   )

@@ -1,8 +1,21 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { loginUser } from '../reducers/userReducer'
+import { makeStyles } from '@material-ui/core/styles'
+import { FormControl, Typography, InputLabel, OutlinedInput, Button } from '@material-ui/core'
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1)
+    },
+    display: 'flex',
+    flexDirection: 'column'
+  }
+}))
 
 const LoginForm = () => {
+  const classes = useStyles()
   const dispatch = useDispatch()
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -15,29 +28,30 @@ const LoginForm = () => {
   }
 
   return (
-    <form onSubmit={handleLogin}>
-      <h2>Log in to Application</h2>
-      <div>
-        username
-        <input
+    <form className={classes.root} onSubmit={handleLogin}>
+      <Typography variant='h4'>Log in to Application</Typography>
+      <FormControl variant='outlined'>
+        <InputLabel htmlFor='username'>Username</InputLabel>
+        <OutlinedInput
           type='text'
           value={username}
-          name='Username'
           id='username'
+          label='Username'
           onChange={({ target }) => setUsername(target.value)}
         />
-      </div>
-      <div>
-        password
-        <input
+      </FormControl>
+      <FormControl variant='outlined'>
+        <InputLabel htmlFor='password'>Password</InputLabel>
+        <OutlinedInput
           type='password'
           value={password}
           name='Password'
           id='password'
+          label='Password'
           onChange={({ target }) => setPassword(target.value)}
         />
-      </div>
-      <button type='submit' id='login-button'>login</button>
+      </FormControl>
+      <Button color='primary' variant='contained' type='submit' id='login-button'>Login</Button>
     </form>
   )
 }

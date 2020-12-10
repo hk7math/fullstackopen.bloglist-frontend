@@ -1,4 +1,4 @@
-const initialState = []
+const initialState = ['Welcome!', 'info']
 let timeout
 
 export const setNotification = (text, color, duration) =>

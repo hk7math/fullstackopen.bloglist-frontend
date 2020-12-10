@@ -16,7 +16,7 @@ export const setBlogs = () =>
 export const addBlog = (blog, config) =>
   async dispatch => {
     const res = await blogService.postBlog(blog, config)
-    dispatch(setNotification(`a new blog ${res.title} by ${res.author} added`, 'green', 3000))
+    dispatch(setNotification(`a new blog ${res.title} by ${res.author} added`, 'success', 3000))
     dispatch({
       type: 'ADD_BLOG',
       data: res
@@ -26,7 +26,7 @@ export const addBlog = (blog, config) =>
 export const likeBlog = (blog) =>
   async dispatch => {
     await blogService.likeBlog(blog)
-    dispatch(setNotification(`blog ${blog.title} by ${blog.author} is liked`, 'green', 3000))
+    dispatch(setNotification(`blog ${blog.title} by ${blog.author} is liked`, 'success', 3000))
     dispatch({
       type: 'LIKE_BLOG',
       data: blog.id
@@ -36,7 +36,7 @@ export const likeBlog = (blog) =>
 export const removeBlog = (blog, config) =>
   async dispatch => {
     await blogService.deleteBlog(blog, config)
-    dispatch(setNotification(`blog ${blog.title} by ${blog.author} is removed`, 'red', 3000))
+    dispatch(setNotification(`blog ${blog.title} by ${blog.author} is removed`, 'error', 3000))
     dispatch({
       type: 'DEL_BLOG',
       data: blog.id
@@ -46,7 +46,7 @@ export const removeBlog = (blog, config) =>
 export const commentBlog = (blog, comment) =>
   async dispatch => {
     const res = await blogService.commentBlog(blog, comment)
-    dispatch(setNotification(`blog ${blog.title} has a new comment`, 'green', 3000))
+    dispatch(setNotification(`blog ${blog.title} has a new comment`, 'success', 3000))
     dispatch({
       type: 'COMMENT_BLOG',
       data: res

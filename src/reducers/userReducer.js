@@ -4,17 +4,17 @@ const initialState = null
 
 export const loginUser = (username, password) =>
   async dispatch => {
-    dispatch(setNotification('Loading...', 'grey', 3000))
+    dispatch(setNotification('Loading...', 'info', 3000))
     try {
       const user = await loginService.login({ username, password })
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
-      dispatch(setNotification(`Successfully logged in as ${user.name}`, 'green', 3000))
+      dispatch(setNotification(`Successfully logged in as ${user.name}`, 'success', 3000))
       dispatch({
         type: 'SET_USER',
         data: user
       })
     } catch (e) {
-      dispatch(setNotification(e.message, 'red', 3000))
+      dispatch(setNotification(e.message, 'error', 3000))
     }
   }
 

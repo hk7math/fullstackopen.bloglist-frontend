@@ -1,9 +1,31 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useRouteMatch, Redirect } from 'react-router-dom'
+import { useRouteMatch, Redirect, Link } from 'react-router-dom'
 import { likeBlog, removeBlog, commentBlog } from '../reducers/blogReducer'
+import {
+  Button, Paper, Card, CardActions,
+  FormControl, InputLabel, OutlinedInput,
+  TableContainer, Typography, TableHead, Table, TableRow, TableCell, TableBody
+} from '@material-ui/core'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1)
+    }
+  },
+  comment: {
+    display: 'flex',
+    alignItems: 'baseline',
+    '& > *': {
+      margin: theme.spacing(1)
+    }
+  }
+}))
 
 const Viewable = () => {
+  const classes = useStyles()
   const dispatch = useDispatch()
   const currentUser = useSelector(state => state.user)
   const blogs = useSelector(state => state.blogs)
@@ -32,26 +54,53 @@ const Viewable = () => {
   }
 
   return (
-    <>
-      <h2>{title} {author}</h2>
-      <a href={url}>{url}</a>
-      <br />
-      {`likes ${likes} `}
-      <button data-testid='likeButton' onClick={clickLike}>like</button>
-      <br />
-      added by {user.name}
-      <br />
-      {currentUser.username === user.username && <button onClick={clickRemove}>remove</button>}
+    <Card elevation={1} className={classes.root}>
+      <Typography variant='h4'>{title} {author}</Typography>
+      <Typography variant='subtitle1'> Submitted by <Link to={`/users/${user.id}`}>{user.name}</Link> </Typography>
 
-      <h3>comments</h3>
-      <input name='comment' value={comment} onChange={({ target }) => setComment(target.value)} />
-      <button onClick={clickComment}>add comment</button>
+      <CardActions>
+        <Button variant='contained' size='small'><a href={url}>Link</a></Button>
+        <Button variant='contained' color='primary' size='small' onClick={clickLike}>{`${likes} Like${likes > 1 && 's'}`}</Button>
+        {
+          currentUser.username === user.username &&
+            <Button variant='contained' color='secondary' size='small' onClick={clickRemove}>Lost</Button>
+        }
+      </CardActions>
+
+      <div className={classes.comment}>
+        <FormControl variant='outlined'>
+          <InputLabel htmlFor='title'>Comment</InputLabel>
+          <OutlinedInput
+            type='text'
+            value={comment}
+            id='comment'
+            label='Comment'
+            onChange={({ target }) => setComment(target.value)}
+          />
+        </FormControl>
+        <Button onClick={clickComment} size='large'>Add</Button>
+      </div>
       {!!comments.length && (
-        <ul>
-          {comments.map(comment => <li key={comment.date}>{comment.body}</li>)}
-        </ul>
+        <TableContainer component={Paper}>
+          <Table size='small'>
+            <TableHead>
+              <TableRow>
+                <TableCell>Comment</TableCell>
+                <TableCell>Date</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {comments.map(comment =>
+                <TableRow key={comment.date}>
+                  <TableCell>{comment.body}</TableCell>
+                  <TableCell>{comment.date}</TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
       )}
-    </>
+    </Card>
   )
 }
 

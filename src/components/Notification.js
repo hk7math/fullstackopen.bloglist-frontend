@@ -1,12 +1,20 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Alert } from '@material-ui/lab'
+import { makeStyles } from '@material-ui/core/styles'
+
+const useStyles = makeStyles(theme => ({
+  message: {
+    marginTop: theme.spacing(1)
+  }
+}))
 
 const Notification = () => {
-  const [text, color] = useSelector(state => state.notification)
+  const classes = useStyles()
+  const [text, severity] = useSelector(state => state.notification)
+
   return (
-    <div id='message' style={{ color }}>
-      {text}
-    </div>
+    <Alert className={classes.message} id='message' variant='outlined' severity={severity}>{text}</Alert>
   )
 }
 
